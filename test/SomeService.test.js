@@ -7,6 +7,7 @@ const {
 const { assert } = require('chai');
 
 const BasicToken = artifacts.require("BasicToken");
+const TokenWithPermit = artifacts.require("TokenWithPermit");
 const SomeService = artifacts.require("SomeService");
 
 // helper
@@ -14,10 +15,12 @@ const ether = (n) => web3.utils.toWei(n.toString(), 'ether');
 
 contract("SomeService", accounts => {
   let basicTokenInstance;
+  let tokenWithPermitInstance;
   let someServiceInstance;
 
   beforeEach(async () => {
     basicTokenInstance = await BasicToken.deployed();
+    tokenWithPermitInstance = await TokenWithPermit.deployed();
     someServiceInstance = await SomeService.deployed();
   });
 
@@ -64,6 +67,12 @@ contract("SomeService", accounts => {
       assert.isTrue(isClient);
     });
 
+  });
+
+  describe("TokenWithPermit tests", () => {
+    xit("allows service to spend tokens via permit", async () => {
+      
+    });
   });
 
 });
