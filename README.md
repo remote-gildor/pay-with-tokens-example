@@ -4,9 +4,13 @@
 
 A smart contract and a Vue dApp that allows user to pay for a service with tokens.
 
+Two ways to pay with tokens:
+
+- Approve + Transfer (**two** transactions)
+- using `permit()` in order to do both the approval and the transfer **in 1 transaction**
+
 ## TODO
 
-- Token with `permit()`
 - Vue dApp
 
 ## Install npm packages

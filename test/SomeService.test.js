@@ -70,8 +70,52 @@ contract("SomeService", accounts => {
   });
 
   describe("TokenWithPermit tests", () => {
-    xit("allows service to spend tokens via permit", async () => {
-      
+    it("allows service to spend tokens via permit", async () => {
+      // check token balance of the service contract
+      let serviceBalanceBefore = await tokenWithPermitInstance.balanceOf(someServiceInstance.address);
+      assert.equal(serviceBalanceBefore, 0);
+
+      let tokenAmount = ether(100);
+      let deadline = Date.now() + 2400*1000; // deadline is 40 minutes
+
+      // hash params: owner, spender, value, nonce, deadline, token contract address
+      let params = web3.eth.abi.encodeParameters(
+        [
+          "address", "address", "uint256", "uint256", "uint256", "address"
+        ],
+        [
+          accounts[0], someServiceInstance.address, tokenAmount, 1, deadline, tokenWithPermitInstance.address
+        ]
+      );
+
+      // generate hash
+      let permitHash = web3.utils.keccak256(params);
+
+      // sig
+      let sig = await web3.eth.sign(permitHash, accounts[0]);
+
+      // extract v, r, s
+      let v = web3.utils.toDecimal("0x" + sig.slice(130, 132)) + 27;
+      let r = sig.slice(0, 66);
+      let s = "0x" + sig.slice(66, 130);
+
+      // payViaPermit()
+      let payment = await someServiceInstance.payViaPermit(
+        tokenAmount, 
+        tokenWithPermitInstance.address,
+        deadline,
+        v, r, s
+      );
+
+      // note that here we're expecting an event from another contract, hence "inTransaction"
+      expectEvent.inTransaction(payment.tx, tokenWithPermitInstance, "Transfer", {
+        from: accounts[0],
+        to: someServiceInstance.address,
+        value: tokenAmount
+      });
+
+      let serviceBalanceAfter = await tokenWithPermitInstance.balanceOf(someServiceInstance.address);
+      assert.equal(serviceBalanceAfter, tokenAmount);
     });
   });
 

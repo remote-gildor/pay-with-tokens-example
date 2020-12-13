@@ -36,7 +36,7 @@ contract("TokenWithPermit", accounts => {
 
       const inst = await TokenWithPermit.deployed();
       const balance = await inst.balanceOf(accounts[1]); // note this is the second account
-      assert.equal(balance, web3.utils.toWei("20000", 'ether')); // 10 thousand tokens
+      assert.equal(balance, web3.utils.toWei("19000", 'ether')); // 19 thousand tokens
 
     });
 

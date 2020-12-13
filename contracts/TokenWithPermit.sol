@@ -13,8 +13,9 @@ contract TokenWithPermit is ERC20 {
   // permit() nonces
   mapping(address => uint) public nonces;
 
-  constructor (address tokenHolder) ERC20(_name, _symbol) public {
-    _mint(tokenHolder, 20*1000*bil*bil); // mint 20 thousand tokens (note: 18 decimal places)
+  constructor (address tokenHolder1, address tokenHolder2) ERC20(_name, _symbol) public {
+    _mint(tokenHolder1, 19*1000*bil*bil); // mint 19 thousand tokens for the 2nd account (note: 18 decimal places)
+    _mint(tokenHolder2, 1*1000*bil*bil); // mint a thousand tokens for the 1st account (note: 18 decimal places)
   }
 
   // Adapted from UniswapV2ERC20
