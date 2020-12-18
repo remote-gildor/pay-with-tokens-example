@@ -19,7 +19,7 @@ contract TokenWithPermit is ERC20 {
   }
 
   // Adapted from UniswapV2ERC20
-  function permit(address owner, address spender, uint256 value, uint256 deadline, uint8 v, bytes32 r, bytes32 s) external {
+  function permit(address owner, address spender, uint256 value, uint256 deadline, uint8 v, bytes32 r, bytes32 s) external returns (bool){
     require(deadline >= block.timestamp, 'The request is past the deadline (EXPIRED)');
 
     bytes32 pHash = keccak256(
@@ -29,6 +29,8 @@ contract TokenWithPermit is ERC20 {
     address recoveredAddress = ecrecover(keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", pHash)), v, r, s);
     require(recoveredAddress != address(0) && recoveredAddress == owner, 'The signature is invalid');
     _approve(owner, spender, value);
+
+    return true;
   }
 
 }

@@ -75,7 +75,7 @@ interface IERC20Permit {
      * - `owner` cannot be the zero address.
      * - `spender` cannot be the zero address.
      */
-    function permit(address owner, address spender, uint256 value, uint256 deadline, uint8 v, bytes32 r, bytes32 s) external;
+    function permit(address owner, address spender, uint256 value, uint256 deadline, uint8 v, bytes32 r, bytes32 s) external returns (bool);
 
     /**
      * @dev Emitted when `value` tokens are moved from one account (`from`) to
